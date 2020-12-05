@@ -10,15 +10,11 @@ Planten hebben een constante beweging, Darwin noemde deze ***circumunation***. D
 3. jumerwires
 4. arduino UNO
 
----
+
 
 ## Getting started
 
----
-
 ## Status
-
----
 
 ## Auteurs
 Britt Leysen
