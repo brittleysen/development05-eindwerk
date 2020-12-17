@@ -11,7 +11,6 @@ Planten hebben een constante beweging, Darwin noemde deze ***circumunation***. D
 4. arduino UNO
 
 
-
 ## Getting started
 
 ## Status
@@ -19,5 +18,5 @@ Planten hebben een constante beweging, Darwin noemde deze ***circumunation***. D
 ## Auteurs
 Britt Leysen
 
-### bronvermelding
+### Sources
 [meetup Arduino](https://github.com/andreluiz1987/MeetupArduino)
