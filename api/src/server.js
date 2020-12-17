@@ -35,6 +35,10 @@ app.get('/', async (req, res) => {
 }) 
 
 app.get('/plants', (req, res) => {
+  // check if request is good
+  await pg.select('*').table('plants').then((data) => {
+    res.send(data)
+  })
   res.sendStatus(200)
 })
 
