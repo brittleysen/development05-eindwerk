@@ -26,14 +26,17 @@ app.get('/test', (req, res) => {
     res.status(200).send();
 })
 app.get('/', async (req, res) => {
-    const result = await pg
-      .select(['uuid', 'title', 'created_at'])
-      .from('story') //tabelnaam
-    res.json({
-        res: result
-    })
-  }) 
-  
+  const result = await pg
+    .select(['uuid', 'title', 'created_at'])
+    .from('story') //tabelnaam
+  res.json({
+      res: result
+  })
+}) 
+
+app.get('/plants', (req, res) => {
+  res.sendStatus(200)
+})
 
 let initialiseTables = async () => {
     await pg.schema.createTable('analogeData', (table) => {
