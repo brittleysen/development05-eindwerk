@@ -8,7 +8,7 @@ const pg = require ('knex')({
     client: 'pg',
     version: '9.6',
     searchPath: ['knex', 'public'],
-    connenction: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING:'postgres://example:example@store:5432/brittleysen'
+    connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING:'postgres://example:example@store:5432/brittleysen'
 });
 //postgres://example:example@localhost:5432/test
 const app = express();
@@ -35,12 +35,42 @@ app.get('/', async (req, res) => {
   }) 
   
 
-let initialiseTables = async () => {
-    await pg.schema.createTable('analogeData', (table) => {
-        table.string('testTab');
-    })
+  async function initialiseTables() {
+    await pg.schema.hasTable('storyblock').then(async (exists) => {
+      if (!exists) {
+        await pg.schema
+          .createTable('storyblock', (table) => {
+            table.increments();
+            table.string('content');
+            table.string('story_id');
+            table.integer('order');
+            table.timestamps(true, true);
+          })
+          .then(async () => {
+            console.log('created table storyblock');
+          });
+  
+      }
+    });
+    await pg.schema.hasTable('story').then(async (exists) => {
+      if (!exists) {
+        await pg.schema
+          .createTable('story', (table) => {
+            table.increments();
+            table.string('title');
+            table.string('summary');
+            table.timestamps(true, true);
+          })
+          .then(async () => {
+            console.log('created table story');
+            for (let i = 0; i < 10; i++) {
+              await pg.table('story').insert({title: `random element number ${i}` })
+            }
+          });
+          
+      }
+    });
   }
-
   initialiseTables()
 
 module.exports = app;
