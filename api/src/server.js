@@ -2,13 +2,15 @@ const express = require('express');
 const bodyParser = require ('body-parser');
 const http = require('http');
 
-const port = 5000;
+const Helpers = require('./utils/helpers.js')
+
+const port = 3001;
 
 const pg = require ('knex')({
     client: 'pg',
     version: '9.6',
     searchPath: ['knex', 'public'],
-    connenction: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING:'postgres://example:example@store:5432/brittleysen'
+    connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING:'postgres://example:example@localhost:5432/brittleysen'
 });
 //postgres://example:example@localhost:5432/test
 const app = express();
@@ -33,14 +35,55 @@ app.get('/', async (req, res) => {
         res: result
     })
   }) 
-  
 
-let initialiseTables = async () => {
-    await pg.schema.createTable('analogeData', (table) => {
-        table.string('testTab');
-    })
+async function initialiseTables() {
+    await pg.schema.hasTable('plant').then(async (exists) => {
+      if (!exists) {
+        await pg.schema
+          .createTable('plant', (table) => {
+            table.increments();
+            table.uuid('uuid');
+            table.string('soort');
+            table.string('botanische_naam');
+            table.integer('minimale_temperatuur');
+            table.integer('maximale_temperatuur');
+            table.string('zonlicht');
+            table.timestamps(true, true);
+          })
+          .then(async () => {
+            console.log('created table plant');
+            for (let i = 0; i < 2; i++) {
+                const uuid = Helpers.generateUUID();
+                await pg.table('plant').insert({
+                    uuid,
+                    soort: `calathea`,
+                    botanische_naam: `calathea lancifolia`,
+                    minimale_temperatuur: 18,
+                    maximale_temperatuur: 24,
+                    zonlicht: `gefilterd licht`
+                })
+              }
+          });
+      }
+    });
+    await pg.schema.hasTable('meetresultaten').then(async (exists) => {
+      if (!exists) {
+        await pg.schema
+          .createTable('meetresultaten', (table) => {
+            table.increments();
+            table.uuid('uuid');
+            table.string('datum');
+            table.integer('meetwaarde');
+            table.timestamps(true, true);
+          })
+          .then(async () => {
+            console.log('created table meetresultaten');
+          });
+      }
+    });
   }
 
   initialiseTables()
+
 
 module.exports = app;

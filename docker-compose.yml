@@ -8,6 +8,7 @@ services:
       PG_CONNECTION_STRING: postgres://example:example@store:5432/brittleysen
     ports:
       - 5000:5000
+
     volumes:
       - ./api/src:/usr/app/api/src
 
