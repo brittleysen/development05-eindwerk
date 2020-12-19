@@ -36,6 +36,11 @@ app.get('/', async (req, res) => {
   })
 })
 
+/**
+ * endpoint /plants
+ * @params soort, botanische_naam, minimale_temperatuur, maximale_temperatuur, zonlicht
+ * @returns req.body or error
+ */
 app.post('/plants', async (req, res) => {
   let checkIfExists = Helpers.checkIfExists(req.body)
   let checkInputStrings = Helpers.checkInputStrings(req.body)
