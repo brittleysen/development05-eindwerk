@@ -41,11 +41,14 @@ app.get('/', async (req, res) => {
  * @param none
  * @returns list all plants
  */
-app.get('/plants', (req, res) => {
-    pg.select('*').table('plant').then((data) => {
-      res.send(data)
-    })
-    res.sendStatus(200)
+app.get('/plants', async (req, res) => {
+  const result = await pg
+    .select('*')
+    .from('plant') //tabelnaam
+  res.json({
+    res: result
+  })
+  res.sendStatus(200)
 })
 
 async function initialiseTables() {
