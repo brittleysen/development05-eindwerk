@@ -60,3 +60,42 @@ describe('helpers test checkInputStrings', () => {
         expect(Helpers.checkInputStrings(body)).toBe('Lengte mag niet langer zijn dan 50 karakters')
     })
 })
+
+describe('helpers test checkTemperature', () => {
+    test('De temperatuurwaarden mogen niet null zijn', () => {
+        const errorMessage = 'De minimale en/of maximale temperatuur mogen niet null zijn.'
+        expect(Helpers.checkTemperature(null, null)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(null, 101)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(23, null)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(23, 23)).toBe(null)
+    })
+
+    test('Waarde minimale en maximale temperatuur moet een nummer zijn', () =>{
+        const errorMessageMin = 'De waarde van minimale temperatuur is geen nummer'
+        const errorMessageMax = 'De waarde van maximale temperatuur is geen nummer'
+        expect(Helpers.checkTemperature("test", "test")).toBe(errorMessageMin)
+        expect(Helpers.checkTemperature("test", 0)).toBe(errorMessageMin)
+        expect(Helpers.checkTemperature(0, "test")).toBe(errorMessageMax)
+        expect(Helpers.checkTemperature(0, 0)).toBe(null)
+    })
+    test('Minimale temperatuur moet tussen -50 en 50 liggen.', () => {
+        const errorMessage ='De ingegeven temperatuur is te hoog (groter dan 50) of te laag (kleiner dan 50)'
+        expect(Helpers.checkTemperature(-1000, 50)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(1000, 50)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(-51, 50)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(51, 50)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(-50, 50)).toBe(null)
+        expect(Helpers.checkTemperature(50, 50)).toBe(null)
+        expect(Helpers.checkTemperature(0, 50)).toBe(null)
+    })
+    test('Maximale temperatuur moet tussen 0 en 100 liggen.', () => {
+        const errorMessage ='De ingegeven temperatuur is te hoog (groter dan 100) of te laag (kleiner dan 0)'
+        expect(Helpers.checkTemperature(0, -50)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(0, 150)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(0, -1)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(0, 101)).toBe(errorMessage)
+        expect(Helpers.checkTemperature(0, 0)).toBe(null)
+        expect(Helpers.checkTemperature(0, 100)).toBe(null)
+        expect(Helpers.checkTemperature(0, 50)).toBe(null)
+    })
+})
