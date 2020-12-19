@@ -4,7 +4,7 @@ const http = require('http');
 
 const Helpers = require('./utils/helpers.js')
 
-const port = 3001;
+const port = 5000;
 
 const pg = require ('knex')({
     client: 'pg',
@@ -35,6 +35,18 @@ app.get('/', async (req, res) => {
         res: result
     })
   }) 
+
+/**
+ * /plants endpoint
+ * @param none
+ * @returns list all plants
+ */
+app.get('/plants', (req, res) => {
+    pg.select('*').table('plants').then((data) => {
+      res.send(data)
+    })
+    res.sendStatus(200)
+})
 
 async function initialiseTables() {
     await pg.schema.hasTable('plant').then(async (exists) => {
@@ -83,6 +95,6 @@ async function initialiseTables() {
     });
   }
 
-
+initialiseTables();
 
 module.exports = app;
