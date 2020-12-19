@@ -44,7 +44,26 @@ const Helpers = {
             return 'Lengte mag niet langer zijn dan 50 karakters'
         }
         return null
-    }
+    },
+
+    checkTemperature: (minimale_temperatuur, maximale_temperatuur) => {
+        if(minimale_temperatuur === null || maximale_temperatuur === null){
+            return 'De minimale en/of maximale temperatuur mogen niet null zijn.'
+        }
+        if(typeof minimale_temperatuur !== 'number'){
+            return 'De waarde van minimale temperatuur is geen nummer'
+        }
+        if(typeof maximale_temperatuur !== 'number'){
+            return 'De waarde van maximale temperatuur is geen nummer'
+        }
+        if(minimale_temperatuur < -50 || minimale_temperatuur > 50){
+            return 'De ingegeven temperatuur is te hoog (groter dan 50) of te laag (kleiner dan 50)'
+        }
+        if(maximale_temperatuur < 0 || maximale_temperatuur > 100){
+            return 'De ingegeven temperatuur is te hoog (groter dan 100) of te laag (kleiner dan 0)'
+        }
+        return null
+    } 
 }
 
 module.exports = Helpers
