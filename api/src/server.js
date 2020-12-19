@@ -29,8 +29,8 @@ app.get('/test', (req, res) => {
 })
 app.get('/', async (req, res) => {
     const result = await pg
-      .select(['uuid', 'title', 'created_at'])
-      .from('story') //tabelnaam
+      .select(['uuid', 'botanische_naam', 'created_at'])
+      .from('plant') //tabelnaam
     res.json({
         res: result
     })
@@ -42,7 +42,7 @@ app.get('/', async (req, res) => {
  * @returns list all plants
  */
 app.get('/plants', (req, res) => {
-    pg.select('*').table('plants').then((data) => {
+    pg.select('*').table('plant').then((data) => {
       res.send(data)
     })
     res.sendStatus(200)
