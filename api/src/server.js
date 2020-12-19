@@ -26,14 +26,21 @@ app.get('/test', (req, res) => {
     res.status(200).send();
 })
 app.get('/', async (req, res) => {
-    const result = await pg
-      .select(['uuid', 'title', 'created_at'])
-      .from('story') //tabelnaam
-    res.json({
-        res: result
-    })
-  }) 
-  
+  const result = await pg
+    .select(['uuid', 'title', 'created_at'])
+    .from('story') //tabelnaam
+  res.json({
+      res: result
+  })
+}) 
+
+app.get('/plants', (req, res) => {
+  // check if request is good
+  await pg.select('*').table('plants').then((data) => {
+    res.send(data)
+  })
+  res.sendStatus(200)
+})
 
   async function initialiseTables() {
     await pg.schema.hasTable('storyblock').then(async (exists) => {
