@@ -48,7 +48,7 @@ app.get('/plants', async (req, res) => {
   res.json({
     res: result
   })
-  res.sendStatus(200)
+  res.status(200).send()
 })
 
 async function initialiseTables() {
