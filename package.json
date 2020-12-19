@@ -1,0 +1,25 @@
+{
+  "name": "development05-eindwerk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "docker-compose build",
+    "start": "docker-compose up",
+    "sup": "docker-compose build && docker-compose up",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brittleysen/development05-eindwerk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brittleysen/development05-eindwerk/issues"
+  },
+  "homepage": "https://github.com/brittleysen/development05-eindwerk#readme",
+  "dependencies": {
+    "npm": "^7.1.1"
+  }
+}

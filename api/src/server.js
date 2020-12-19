@@ -12,12 +12,12 @@ const pg = require ('knex')({
     searchPath: ['knex', 'public'],
     connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING:'postgres://example:example@localhost:5432/brittleysen'
 });
-
+//postgres://example:example@localhost:5432/test
 const app = express();
 http.Server(app);
 
 app.use(bodyParser.json());
-app.use(
+app.use( 
     bodyParser.urlencoded({
         extended: true
     })
@@ -27,16 +27,14 @@ app.use(
 app.get('/test', (req, res) => {
     res.status(200).send();
 })
-
-/**
- * GET plant 
- * @params 
- * @returns
- */
-app.get('/plant', (req, res) => {
-    res.status(200).send();
-    console.log('hallo plant')
-})
+app.get('/', async (req, res) => {
+    const result = await pg
+      .select(['uuid', 'title', 'created_at'])
+      .from('story') //tabelnaam
+    res.json({
+        res: result
+    })
+  }) 
 
 async function initialiseTables() {
     await pg.schema.hasTable('plant').then(async (exists) => {
