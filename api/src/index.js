@@ -1,6 +1,6 @@
 const app = require('./server.js');
 
-const port = 5000;
+const port = 3001;
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
