@@ -4,7 +4,7 @@ const http = require('http');
 
 const Helpers = require('./utils/helpers.js')
 
-const port = 3001;
+const port = 5000;
 
 const pg = require ('knex')({
     client: 'pg',
@@ -29,12 +29,23 @@ app.get('/test', (req, res) => {
 })
 app.get('/', async (req, res) => {
     const result = await pg
-      .select(['uuid', 'title', 'created_at'])
-      .from('story') //tabelnaam
+      .select(['uuid', 'botanische_naam', 'created_at'])
+      .from('plant') //tabelnaam
     res.json({
         res: result
     })
   }) 
+
+app.post('/plants', (req, res) => {
+  console.log(req.body)
+  let errorMessage = Helpers.checkIfExists(req.body)
+  errorMessage = Helpers.checkInputStrings(req.body)
+  
+  res.json({
+    res: errorMessage
+  })
+  res.status(200).send();
+})
 
 async function initialiseTables() {
     await pg.schema.hasTable('plant').then(async (exists) => {
@@ -83,6 +94,6 @@ async function initialiseTables() {
     });
   }
 
-
+  initialiseTables()
 
 module.exports = app;
