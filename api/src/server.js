@@ -12,7 +12,7 @@ const pg = require('knex')({
   searchPath: ['knex', 'public'],
   connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : 'postgres://example:example@localhost:5432/brittleysen'
 });
-//postgres://example:example@localhost:5432/test
+
 const app = express();
 http.Server(app);
 
@@ -23,10 +23,11 @@ app.use(
   })
 );
 
-//
+
 app.get('/test', (req, res) => {
   res.status(200).send();
 })
+
 app.get('/', async (req, res) => {
   const result = await pg
     .select(['uuid', 'botanische_naam', 'created_at'])
@@ -56,6 +57,7 @@ app.post('/plants', async (req, res) => {
       maximale_temperatuur: req.body.maximale_temperatuur,
       zonlicht: req.body.zonlicht
     })
+
     res.json({
       res: req.body
     })
@@ -80,9 +82,27 @@ app.post('/plants', async (req, res) => {
     .send()
   }else{
     res.status(400).send()
-  }
+  }) 
+}
   
 })
+  
+/**
+ * /plants endpoint
+ * @param none
+ * @returns list all plants
+ */
+app.get('/plants', async (req, res) => {
+  const result = await pg
+    .select('*')
+    .from('plant') //tabelnaam
+  res.json({
+    res: result
+  })
+  res.status(200).send()
+})
+
+  
 
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
