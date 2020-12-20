@@ -62,31 +62,30 @@ app.post('/plants', async (req, res) => {
       res: req.body
     })
     res.status(200).send();
-  }else if(checkIfExists !== null){
+  } else if (checkIfExists !== null) {
     res.status(418)
     res.json({
-      error: checkIfExists
-    })
-    .send()
-  }else if(checkInputStrings !== null){
+        error: checkIfExists
+      })
+      .send()
+  } else if (checkInputStrings !== null) {
     res.status(418)
     res.json({
-      error: checkInputStrings
-    })
-    .send()
-  }else if(checkTemperature !== null){
+        error: checkInputStrings
+      })
+      .send()
+  } else if (checkTemperature !== null) {
     res.status(418)
     res.json({
-      error: checkTemperature
-    })
-    .send()
-  }else{
+        error: checkTemperature
+      })
+      .send()
+  } else {
     res.status(400).send()
-  }) 
-}
-  
+  }
 })
-  
+
+
 /**
  * /plants endpoint
  * @param none
@@ -102,7 +101,7 @@ app.get('/plants', async (req, res) => {
   res.status(200).send()
 })
 
-  
+
 
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
