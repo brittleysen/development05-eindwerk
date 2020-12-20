@@ -116,9 +116,6 @@ app.delete('/plants/:uuid', async (req, res) => {
   }else{
     res.status(400).send() 
   }
-  res.json({
-    res: result
-  }) 
 })
 
 async function initialiseTables() {
