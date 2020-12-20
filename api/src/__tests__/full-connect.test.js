@@ -1,27 +1,11 @@
-const { Pool } = require('pg');
 const supertest = require('supertest');
 const app = require('../server.js');
 const request = supertest(app);
 
 describe('DB connection test', () => {
-    let pgPool;
-    test('connection test', async (done) =>{
-        const client = await pgPool.connect();
+    test('full connection test', async () => {
         try{
-            await client.query('BEGIN');
-            const {rows} = await client.query('SELECT * FROM plant');
-            expect(rows).toBeInstanceOf(Array);
-        }catch(error){
-            throw error;
-        }finally{
-            client.release(); //close connection
-        }
-    })
-    test('full connection test', async() =>{
-        const client = await pgPool.connect();
-        try{
-            let uuid = null;
-            await request.post('/plants')
+            let uuid = await request.post('/plants')
             .send({
                 "soort": "calathea",
                 "botanische_naam": "calathea lancifolia",
@@ -30,22 +14,17 @@ describe('DB connection test', () => {
                 "zonlicht": "gefilterd licht"
             })
             .expect(200)
-            .then((res) => {
-                uuid = res.body[0].uuid
-                done()
-            }).catch((error)=> {
+            .then((response) => {
+                const parsed =  JSON.parse(response.text)
+                return parsed.res[0].uuid// return only the uuid
+            }).catch((error) => {
                 console.log(error)
             })
-
-            await client.query('BEGIN');
-            const { rows } = await client.query(`SELECT * FROM plant WHERE uuid='${uuid}'`);
-            expect(rows).toBeInsanceOf(Array);
-            expect(rows.length).toBe(1);
-
+            const getRequest =  await request.get(`/plants/${uuid}`).expect(200)
+            const getRequestParse = JSON.parse(getRequest.text)
+            expect(getRequestParse.res).toHaveLength(1)
         }catch(error){
             throw error
-        }finally{
-            client.release(); //close connection
         }
     })
 })
