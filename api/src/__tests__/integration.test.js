@@ -19,4 +19,3 @@ describe('test /GET plants endpoint', () => {
         }
     })
 })
-

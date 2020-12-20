@@ -49,17 +49,23 @@ app.post('/plants', async (req, res) => {
 
   if (checkIfExists === null && checkInputStrings === null && checkTemperature === null) {
     const uuid = Helpers.generateUUID();
-    await pg.table('plant').insert({
-      uuid,
-      soort: req.body.soort,
-      botanische_naam: req.body.botanische_naam,
-      minimale_temperatuur: req.body.minimale_temperatuur,
-      maximale_temperatuur: req.body.maximale_temperatuur,
-      zonlicht: req.body.zonlicht
-    })
-
-    res.json({
-      res: req.body
+    const result = await pg
+      .insert({
+        uuid,
+        soort: req.body.soort,
+        botanische_naam: req.body.botanische_naam,
+        minimale_temperatuur: req.body.minimale_temperatuur,
+        maximale_temperatuur: req.body.maximale_temperatuur,
+        zonlicht: req.body.zonlicht
+      })
+      .table('plant')
+      .returning('*')
+      .then((res) => {
+        return res
+      })
+      
+      res.json({
+      res: result
     })
     res.status(200).send();
   } else if (checkIfExists !== null) {
