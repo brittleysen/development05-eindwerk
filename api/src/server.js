@@ -101,7 +101,22 @@ app.get('/plants', async (req, res) => {
   res.status(200).send()
 })
 
-
+/** DELETE plant by uuid
+ * @params req.params.uuid
+ * @returns status 200 OK or status 400 Bad Request
+ */
+app.delete('/plants/:uuid', async (req, res) => {
+  const result = await pg
+    .del()
+    .from('plant')
+    .where('uuid', req.params.uuid)
+  
+  if(result !== 0){
+    res.status(200).send()
+  }else{
+    res.status(400).send() 
+  }
+})
 
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
