@@ -118,6 +118,28 @@ app.delete('/plants/:uuid', async (req, res) => {
   }
 })
 
+/**  update DB data
+ * @params uuid & req.body  
+ * @returns values of updated row
+ */
+app.put('/plants/:uuid', async (req, res, done) => {
+  let request = req.body
+  request.updated_at = new Date()
+
+  const result = await pg
+  .update(req.body)
+  .from('plant')
+  .where('uuid', req.params.uuid)
+  .returning('*')
+  .then((res) => {
+    return res
+  })
+  done()
+  res.json({
+    res: result
+  })
+})
+
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
     if (!exists) {
