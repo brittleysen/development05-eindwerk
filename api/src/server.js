@@ -101,7 +101,22 @@ app.get('/plants', async (req, res) => {
   res.status(200).send()
 })
 
-
+/**
+ * GET plant by uuid
+ * @params uuid
+ * @returns 1 plant with uuid = req.params.uuid
+ */
+app.get('/plants/:uuid', async (req, res) => {
+    const result = await pg
+      .select('*')
+      .from('plant')
+      .where('uuid', req.params.uuid)
+    res.json({
+      res: result
+    })
+    res.status(200).send()
+  })
+  
 
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
