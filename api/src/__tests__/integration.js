@@ -61,11 +61,21 @@ describe('test /DELETE plants endpoint', () => {
 
 
 /**
- * 
- * @params
- * @returns
+ * Check if updated value is added correctly
+ * @params  {
+                "soort": "calathea",
+                "botanische_naam": "calathea lancifolia",
+                "minimale_temperatuur": 18,
+                "maximale_temperatuur": 24,
+                "zonlicht": "gefilterd licht"
+            }
+            {
+                "soort": "Pilea peperomioides",
+                "maximale_temperatuur": 23
+            }
+ * @returns res.body
  */
-/*
+
 describe('test /PUT plants endpoint', () => {
     test('check if plant row is updated', async () => {
         try{
@@ -111,9 +121,14 @@ describe('test /PUT plants endpoint', () => {
         }
     })
 })
-*/
+
 /**
- * 
+ * check if added meetresultaat is the last one added and check if it equal
+ * @params  plantUUID 
+ *          {   "plantUuid" : plantUUID,
+ *              "meetwaarde" : 354
+ *          }
+ * @returns filter JSON to last one added
  */
 describe('test /POST meetresultaten  and /GET meetresultaten endpoint', () => {
     test('/POST meetresultaten', async () => {
@@ -136,9 +151,8 @@ describe('test /POST meetresultaten  and /GET meetresultaten endpoint', () => {
         const meetResult = JSON.parse(result.res.text).res
         // order json by created_at
         const meetresultatenGet = meetResult.sort(function(a, b){
-            return b.created_at > a.created_at
+            return b.updated_at > a.updated_at
         })
-
         expect(meetresultatenGet[0]).toEqual(meetresultaatPost)            
     })
 })
