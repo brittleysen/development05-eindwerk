@@ -164,14 +164,28 @@ app.put('/plants/:uuid', async (req, res, done) => {
   })
 })
 
+/**
+ * GET meetresultaten by plant UUID
+ * @param plantUuid
+ * @returns meetresultaten of specified plant
+ */
+app.get('/meetresultaten/:plantUuid', async(req, res) => {
+  console.log(req.params)
+  const result = await pg
+  .select('*')
+  .from('meetresultaten ')
+  .where('plantUuid', req.params.plantUuid)
+  res.json({
+    res: result
+  })
+})
 
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
     if (!exists) {
       await pg.schema
         .createTable('plant', (table) => {
-          table.increments();
-          table.uuid('uuid');
+          table.uuid('uuid').primary();
           table.string('soort');
           table.string('botanische_naam');
           table.integer('minimale_temperatuur');
@@ -199,9 +213,8 @@ async function initialiseTables() {
     if (!exists) {
       await pg.schema
         .createTable('meetresultaten', (table) => {
-          table.increments();
           table.uuid('uuid');
-          table.string('datum');
+          table.uuid('plantUuid').references('uuid').inTable('plant'); //foreign key
           table.integer('meetwaarde');
           table.timestamps(true, true);
         })
