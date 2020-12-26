@@ -170,7 +170,6 @@ app.put('/plants/:uuid', async (req, res, done) => {
  * @returns meetresultaten of specified plant
  */
 app.get('/meetresultaten/:plantUuid', async(req, res) => {
-  console.log(req.params)
   const result = await pg
   .select('*')
   .from('meetresultaten ')
