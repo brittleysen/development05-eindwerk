@@ -179,6 +179,24 @@ app.get('/meetresultaten/:plantUuid', async(req, res) => {
   })
 })
 
+app.post('/meetresultaten', async (req, res) => {
+  const uuid = Helpers.generateUUID();
+  const result = await pg
+  .insert({
+    uuid,
+    plantUuid: req.body.plantUuid, 
+    meetwaarde: req.body.meetwaarde
+  })
+  .table('meetresultaten')
+  .returning('*')
+  .then((res) => {
+    return res
+  })
+  res.json({
+    res: result
+  })
+})
+
 async function initialiseTables() {
   await pg.schema.hasTable('plant').then(async (exists) => {
     if (!exists) {
