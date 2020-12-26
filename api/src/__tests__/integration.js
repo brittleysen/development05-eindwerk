@@ -11,10 +11,9 @@ const request = supertest(app)
  */
 describe('test /GET plants endpoint', () => {
     test('check for response 200, OK', async () => {
-        try{
-            await request.get('/plants').expect(200) 
-        }
-        catch(error){
+        try {
+            await request.get('/plants').expect(200)
+        } catch (error) {
             console.log(error)
         }
     })
@@ -26,35 +25,35 @@ describe('test /GET plants endpoint', () => {
  * @returns response 400 Bad Request
  */
 describe('test /DELETE plants endpoint', () => {
-    test('Check for response 400 when unexisting uuid', async () =>{
-        try{
-           await request.del('/plants/00000000-0000-0000-0000-000000000000').expect(400)
-        }catch(error){
+    test('Check for response 400 when unexisting uuid', async () => {
+        try {
+            await request.del('/plants/00000000-0000-0000-0000-000000000000').expect(400)
+        } catch (error) {
             console.log(error)
         }
     })
     test('check for response 200 with existing uuid', async () => {
-        try{
+        try {
             let uuid = await request.post('/plants')
-            .send({
-                "soort": "calathea",
-                "botanische_naam": "calathea lancifolia",
-                "minimale_temperatuur": 18,
-                "maximale_temperatuur": 24,
-                "zonlicht": "gefilterd licht"
-            })
-            .expect(200)
-            .returning('*') //all data from the new row
-            .then((res) => {
-                return res.body[0].uuid // return only the uuid
-            }).catch((error) => {
-                console.log(error)
-            })
-            
+                .send({
+                    "soort": "calathea",
+                    "botanische_naam": "calathea lancifolia",
+                    "minimale_temperatuur": 18,
+                    "maximale_temperatuur": 24,
+                    "zonlicht": "gefilterd licht"
+                })
+                .expect(200)
+                .returning('*') //all data from the new row
+                .then((res) => {
+                    return res.body[0].uuid // return only the uuid
+                }).catch((error) => {
+                    console.log(error)
+                })
+
             const deletedPlant = await request.del(`/plants/'${uuid}'`) //delete the new row
             expect(deletedPlant).status(200);
             expect(deletedPlant.lenght).toBe(0);
-        }catch{
+        } catch {
 
         }
     })
@@ -62,10 +61,21 @@ describe('test /DELETE plants endpoint', () => {
 
 
 /**
- * 
- * @params
- * @returns
+ * Check if updated value is added correctly
+ * @params  {
+                "soort": "calathea",
+                "botanische_naam": "calathea lancifolia",
+                "minimale_temperatuur": 18,
+                "maximale_temperatuur": 24,
+                "zonlicht": "gefilterd licht"
+            }
+            {
+                "soort": "Pilea peperomioides",
+                "maximale_temperatuur": 23
+            }
+ * @returns res.body
  */
+
 describe('test /PUT plants endpoint', () => {
     test('check if plant row is updated', async () => {
         try{
@@ -112,3 +122,37 @@ describe('test /PUT plants endpoint', () => {
     })
 })
 
+/**
+ * check if added meetresultaat is the last one added and check if it equal
+ * @params  plantUUID 
+ *          {   "plantUuid" : plantUUID,
+ *              "meetwaarde" : 354
+ *          }
+ * @returns filter JSON to last one added
+ */
+describe('test /POST meetresultaten  and /GET meetresultaten endpoint', () => {
+    test('/POST meetresultaten', async () => {
+        let plants = await request.get('/plants')
+        const plantUUID = JSON.parse(plants.res.text).res[0].uuid
+
+        let meetresultaatPost = await request.post('/meetresultaten')
+            .send({
+                "plantUuid" : plantUUID,
+                "meetwaarde" : 354
+            })
+            .expect(200)
+            .then((response) => {
+                const parsed = JSON.parse(response.text)
+                return parsed.res[0]
+            }).catch((error) => {
+                console.log(error)
+            })
+        let result = await request.get(`/meetresultaten/${plantUUID}`)
+        const meetResult = JSON.parse(result.res.text).res
+        // order json by created_at
+        const meetresultatenGet = meetResult.sort(function(a, b){
+            return b.updated_at > a.updated_at
+        })
+        expect(meetresultatenGet[0]).toEqual(meetresultaatPost)            
+    })
+})

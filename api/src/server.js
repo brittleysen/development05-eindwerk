@@ -63,8 +63,8 @@ app.post('/plants', async (req, res) => {
       .then((res) => {
         return res
       })
-      
-      res.json({
+
+    res.json({
       res: result
     })
     res.status(200).send();
@@ -109,21 +109,21 @@ app.get('/plants', async (req, res) => {
 
 
 /**
- * GET plant by uuid
- * @params uuid
- * @returns 1 plant with uuid = req.params.uuid
- */
-app.get('/plants/:uuid', async (req, res) => {
-    const result = await pg
-      .select('*')
-      .from('plant')
-      .where('uuid', req.params.uuid)
-    res.json({
-      res: result
-    })
-    res.status(200).send()
+ * GET plant by uuid
+ * @params uuid
+ * @returns 1 plant with uuid = req.params.uuid
+ */
+app.get('/plants/:uuid', async (req, res) => {
+  const result = await pg
+    .select('*')
+    .from('plant')
+    .where('uuid', req.params.uuid)
+  res.json({
+    res: result
   })
-  
+  res.status(200).send()
+})
+
 
 /** DELETE plant by uuid
  * @params req.params.uuid
@@ -134,11 +134,11 @@ app.delete('/plants/:uuid', async (req, res) => {
     .del()
     .from('plant')
     .where('uuid', req.params.uuid)
-  
-  if(result !== 0){
+
+  if (result !== 0) {
     res.status(200).send()
-  }else{
-    res.status(400).send() 
+  } else {
+    res.status(400).send()
   }
 })
 
@@ -151,13 +151,13 @@ app.put('/plants/:uuid', async (req, res, done) => {
   request.updated_at = new Date()
 
   const result = await pg
-  .update(req.body)
-  .from('plant')
-  .where('uuid', req.params.uuid)
-  .returning('*')
-  .then((res) => {
-    return res
-  })
+    .update(req.body)
+    .from('plant')
+    .where('uuid', req.params.uuid)
+    .returning('*')
+    .then((res) => {
+      return res
+    })
   done()
   res.json({
     res: result
@@ -169,14 +169,46 @@ app.put('/plants/:uuid', async (req, res, done) => {
  * @param plantUuid
  * @returns meetresultaten of specified plant
  */
-app.get('/meetresultaten/:plantUuid', async(req, res) => {
-  const result = await pg
-  .select('*')
-  .from('meetresultaten ')
-  .where('plantUuid', req.params.plantUuid)
-  res.json({
-    res: result
-  })
+app.get('/meetresultaten/:plantUuid', async (req, res) => {
+  try {
+    const result = await pg
+      .select('*')
+      .from('meetresultaten ')
+      .where('plantUuid', req.params.plantUuid)
+    res.json({
+      res: result
+    })
+  }catch(error){
+    //throw new Error ('error', error)
+    throw error
+  }
+
+})
+
+app.post('/meetresultaten', async (req, res) => {
+  const uuid = Helpers.generateUUID();
+  const val = Helpers.checkMeetwaardeIsNotHigherThan1023(req.body.meetwaarde);
+  if (val == true) {
+    const result = await pg
+      .insert({
+        uuid,
+        plantUuid: req.body.plantUuid,
+        meetwaarde: req.body.meetwaarde
+      })
+      .table('meetresultaten')
+      .returning('*')
+      .then((res) => {
+        return res
+      })
+    res.json({
+      res: result
+    })
+  } else {
+    res.json({
+      error: 'body does not contain valid values'
+    })
+  }
+
 })
 
 async function initialiseTables() {
