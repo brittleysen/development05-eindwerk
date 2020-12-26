@@ -63,7 +63,24 @@ const Helpers = {
             return 'De ingegeven temperatuur is te hoog (groter dan 100) of te laag (kleiner dan 0)'
         }
         return null
-    } 
+    }, 
+
+    checkMeetwaardeIsNotHigherThan1023:(meetwaarde) => {
+        
+        if(meetwaarde === null){
+            console.log(`meetwaarde is not valid: '${meetwaarde}'`);
+            return false
+        }
+        if(typeof meetwaarde !== 'number'){
+            console.log(`meetwaarde is not a valid type: '${meetwaarde}'`);
+            return false
+        } else if (meetwaarde < 0 || meetwaarde > 1023){
+            console.log(`meetwaarde is not valid: '${meetwaarde}'`);
+            return false
+        } else {
+            return true
+        }
+    }
 }
 
 module.exports = Helpers
