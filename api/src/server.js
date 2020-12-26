@@ -170,13 +170,19 @@ app.put('/plants/:uuid', async (req, res, done) => {
  * @returns meetresultaten of specified plant
  */
 app.get('/meetresultaten/:plantUuid', async (req, res) => {
-  const result = await pg
-    .select('*')
-    .from('meetresultaten ')
-    .where('plantUuid', req.params.plantUuid)
-  res.json({
-    res: result
-  })
+  try {
+    const result = await pg
+      .select('*')
+      .from('meetresultaten ')
+      .where('plantUuid', req.params.plantUuid)
+    res.json({
+      res: result
+    })
+  }catch(error){
+    //throw new Error ('error', error)
+    throw error
+  }
+
 })
 
 app.post('/meetresultaten', async (req, res) => {
