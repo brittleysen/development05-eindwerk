@@ -16,29 +16,32 @@ Docker version:
 Global npms:
 nmp version:
 ```
-voorbeelden van good en bad requests
-good: Getting error "" wehn trying to call endpoint
+###### Example good & bad requests
+**Good:** Getting error "" wehn trying to call endpoint
  0 => what data sending
-Bad: endpoint does not work
+
+**Bad:** endpoint does not work
 
 ## suggest new features
 * Open a featrure request on github
 * declare why usefull
 
-(welke info wil ik krijgen wanneer mensen dat gaan doen)
-
 ## guidelines for development
-VREWIJS OOK NAAR CODE OF CONDUCT 
+Check out the code of conduct
 
 //explain how to set the system for development 
 env file adaption
   * DB dev 
   * VERBOSE
 
-welke globals kunnen ze gebruiken
+###### global variables
+```
+const port = 500
+```
 
-what kind of tests need to be there. 
-mention develoment DB
+###### testing
++ unit tests
++ integration test
 
 ### logging
 ```
@@ -54,12 +57,7 @@ expected log levels:
 |1| console.warn|
 |0| console.error|
 
-## roadmap and vision 
-mention van een forum als dat er is. 
-discord? 
+## roadmap and vision  
 
 ## get in touch
-e-mails kunnen sturen
-discord 
-adnere manier
-via Github
+contact via Github
