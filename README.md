@@ -10,7 +10,7 @@ With an expansion, several plants could be connected and read out. When storing 
 ## Getting started
 Make sure you have following software installed on your computer:
 + Docker desktop
-+ TablePlus
++ TablePlus (with Postgress)
 + Postman
 
 1. **Start the API en DB**
@@ -22,6 +22,7 @@ To run the tests run `npm test a`
 ```
 http://localhost:5000/
 http://localhost:5000/test
+http://localhost:5000/all
 ```
 
 ```
