@@ -208,7 +208,26 @@ app.post('/meetresultaten', async (req, res) => {
       error: 'body does not contain valid values'
     })
   }
+})
+/**
+ * GET plant by meetresultaten
+ * @params resultPlants
+ * @returns plants with meetresultaten
+ */
+app.get('/all', async (req, res) => {
 
+  const resultPlants = await pg
+    .select('*')
+    .from('meetresultaten')
+    .join('plant', function(){
+      this.on('plant.uuid', '=', 'meetresultaten.plantUuid')
+    })
+    
+
+  res.json({
+    res: resultPlants
+  })
+  res.status(200).send()
 })
 
 async function initialiseTables() {
