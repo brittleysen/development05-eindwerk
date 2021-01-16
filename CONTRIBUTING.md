@@ -1,7 +1,5 @@
 # contributing guidelindes
 ---
-//intro
-hoever ste je open voor nieuwe dingen etc. 
 
 ## report bugs
 * open a ticket on github
