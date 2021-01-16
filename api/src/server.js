@@ -210,15 +210,19 @@ app.post('/meetresultaten', async (req, res) => {
   }
 })
 /**
- * GET meetresultaten by plant
+ * GET plant by meetresultaten
  * @params resultPlants
  * @returns plants with meetresultaten
  */
 app.get('/all', async (req, res) => {
+
   const resultPlants = await pg
-    .select( 'plant.uuid', 'plant.botanische_naam', 'meetresultaten.meetwaarde' )
+    .select('*')
     .from('meetresultaten')
-    .rightJoin('plant', 'meetresultaten.plantUuid', 'plant.uuid')
+    .join('plant', function(){
+      this.on('plant.uuid', '=', 'meetresultaten.plantUuid')
+    })
+    
 
   res.json({
     res: resultPlants
